@@ -33,6 +33,14 @@ jobs:
         run: npm ci
       - name: Front matter regression tests
         run: node --test tests/frontMatter.test.mjs
+      - name: Align Rust Tauri with JavaScript API
+        run: cargo update --manifest-path src-tauri/Cargo.toml -p tauri --precise 2.11.0
+      - name: Save resolved Rust dependencies
+        uses: actions/upload-artifact@v4
+        with:
+          name: rust-lockfile
+          path: markdown-sheet/src-tauri/Cargo.lock
+          if-no-files-found: error
       - name: Build Windows application
         run: npm run tauri build -- --no-bundle
       - name: Rust tests
